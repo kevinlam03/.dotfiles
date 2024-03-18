@@ -19,10 +19,21 @@ set wildmenu
 set shell=powershell
 set gp=git\ grep\ -n
 
+" Statusline
+set laststatus=2
+set statusline=%F%m%r%w\ " Filepath and modify read and preview flags
+set statusline+=%y\ 
+
+set statusline+=%=
+
+set statusline+=[line:\ %l/%L]\ 
+
 " Turn on and off highlighting
 nnoremap / :set hlsearch<cr>/
 nnoremap <leader>/ :nohlsearch<cr>
-let g:loaded_matchparen = 1
+
+" Turn on matching parenthesis setting manually, so it doesn't trigger
+"let g:loaded_matchparen = 1
 
 " Configure cursor
 if &term =~ '^win32'
@@ -44,6 +55,7 @@ Plug 'prabirshrestha/vim-lsp'
 Plug 'mattn/vim-lsp-settings'
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'tpope/vim-fugitive'
 
 call plug#end()
 
@@ -60,8 +72,9 @@ function! s:on_lsp_buffer_enabled() abort
     setlocal omnifunc=lsp#complete
     nmap <buffer> gd <plug>(lsp-definition)
     nmap <buffer> K <plug>(lsp-hover)
-"    nmap <buffer> [g <plug>(lsp-previous-diagnostic)
-"    nmap <buffer> ]g <plug>(lsp-next-diagnostic)
+    nmap <buffer> [g <plug>(lsp-previous-diagnostic)
+    nmap <buffer> ]g <plug>(lsp-next-diagnostic)
+    nmap <buffer> gD <plug> (lsp-document-diagnostic)
 endfunction
 
 augroup lsp_install
@@ -81,6 +94,8 @@ let g:lsp_diagnostics_virtual_text_align = "right"
 let g:lsp_inlay_hints_enabled = 0
 
 " Key Bindings
+" Dictionary autocomplete
+" inoremap <expr> <C-x><C-k> fzf#vim#complete('cat /usr/share/dict/words')
 " Create matching curly brace for loops, if statements, etc.
 inoremap {<cr> {<cr>}<esc>O
 
@@ -94,8 +109,9 @@ nnoremap <leader>ev :sp $MYVIMRC<cr>
 " Not sure if this is working
 nnoremap <leader>sv :source $MYVIMRC<cr>
 
-" Search files FZF
 nnoremap <leader>f :Files<cr>
+nnoremap <leader>F :GFiles?<cr>
+nnoremap <leader>b :Buffers<cr>
 
 " Make next search term centered in page
 nnoremap n nzz
