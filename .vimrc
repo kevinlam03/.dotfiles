@@ -112,11 +112,11 @@ let g:lsp_inlay_hints_enabled = 0
 let g:lsp_document_highlight_enabled = 0
 function! s:on_lsp_buffer_enabled() abort
     setlocal omnifunc=lsp#complete
-    nnoremap <buffer> gd <plug>(lsp-definition)
-    nnoremap <buffer> K <plug>(lsp-hover)
-    nnoremap <buffer> [g <plug>(lsp-previous-diagnostic)
-    nnoremap <buffer> ]g <plug>(lsp-next-diagnostic)
-    nnoremap <buffer> <leader>d <plug>(lsp-document-diagnostics)
+    nmap <buffer> gd <plug>(lsp-definition)
+    nmap <buffer> K <plug>(lsp-hover)
+    nmap <buffer> [g <plug>(lsp-previous-diagnostic)
+    nmap <buffer> ]g <plug>(lsp-next-diagnostic)
+    nmap <buffer> <leader>d <plug>(lsp-document-diagnostics)
 endfunction
 
 augroup lsp_install
