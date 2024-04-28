@@ -4,6 +4,7 @@ let mapleader=" "
 syntax on
 set termguicolors
 set splitright
+set splitbelow
 set backspace=indent,eol,start,nostop
 set nocompatible
 set showcmd
@@ -17,10 +18,12 @@ set tabstop=4
 set shiftwidth=4
 set expandtab
 set wildmenu
+set linebreak
 set dictionary=/usr/share/dict/words
 set clipboard=unnamedplus
 " Use Powershell when running terminal inside vim
 "set shell=powershell
+
 " Turn on matching parenthesis setting manually, so it doesn't trigger
 "let g:loaded_matchparen = 1
 autocmd BufWinEnter *.vimrc loadview
@@ -38,9 +41,48 @@ inoremap {<cr> {<cr>}<esc>O
 " Esc key remap
 inoremap jj <esc>
 
+" Delete word in insert mode, not working
+" imap <C-BS> <C-W>
+
 " Turn on and off highlighting
 nnoremap / :set hlsearch<cr>/
 nnoremap <esc><esc> :set nohlsearch<cr>
+
+" Vertical movement for linewrap
+nnoremap j gj
+nnoremap k gk
+
+" Bracket motions
+" Buffer list
+nnoremap [b :bp<cr>zz
+nnoremap ]b :bn<cr>zz
+nnoremap [B :bf<cr>zz
+nnoremap ]B :bl<cr>zz
+
+" Location list
+nnoremap [l :lp<cr>zz
+nnoremap ]l :ln<cr>zz
+nnoremap [L :lf<cr>zz
+nnoremap ]L :ll<cr>zz
+
+" Quickfix list
+nnoremap [c :cp<cr>zz
+nnoremap ]c :cn<cr>zz
+nnoremap [C :cf<cr>zz
+nnoremap ]C :cl<cr>zz
+
+" Toggle options
+nnoremap [on :set number<cr>
+nnoremap ]on :set nonumber<cr>
+nnoremap [or :set relativenumber<cr>
+nnoremap ]or :set norelativenumber<cr>
+
+" Add newlines
+nnoremap [<space> O<esc>j
+nnoremap ]<space> o<esc>k
+
+" Y to yank to end of line
+nnoremap Y y$
 
 " Yank to system clipboard
 " nnoremap <leader>y "+y
@@ -57,6 +99,16 @@ xnoremap <leader>p "_dP
 " Paste from system clipboard
 nnoremap <leader>p "+p
 nnoremap <leader>P "+P
+
+" String search centered
+nnoremap * *zz
+nnoremap # #zz
+
+" Close focus window centered
+nnoremap <C-w>o <C-w>ozz
+
+" Goto definition centered
+nnoremap gd gdzz
 
 " Page ups and downs are centered
 nnoremap <C-u> <C-u>zz
@@ -75,6 +127,9 @@ nnoremap <down> jzz
 " Make next search term centered in page
 nnoremap n nzz
 nnoremap N Nzz
+
+" Goto definition centered
+nnoremap gd gdzz
 
 " Resize windows
 nnoremap <C-up> <C-W>+
@@ -127,6 +182,7 @@ Plug 'prabirshrestha/asyncomplete.vim'
 Plug 'prabirshrestha/asyncomplete-lsp.vim'
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+" Plug 'sheerun/vim-polyglot'
 Plug 'tpope/vim-fugitive'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -143,11 +199,12 @@ let g:airline_theme='catppuccin_mocha'
 " LSP Settings
 " Don't show virtual diagnostic text while typing
 let g:lsp_diagnostics_virtual_text_insert_mode_enabled = 0
+let g:lsp_diagnostics_virtual_text_enabled = 1
 " Align it right
 let g:lsp_diagnostics_virtual_text_align = "right"
 " Turn off highlighting of diagnostics errors (or could change color)
 let g:lsp_diagnostics_highlights_enabled = 0
-let g:lsp_inlay_hints_enabled = 0
+let g:lsp_inlay_hints_enabled = 1
 " Change text in gutter for diagnostics
 "let g:lsp_diagnostics_signs_error = ""
 "let g:lsp_diagnostics_signs_warning = ""
@@ -165,8 +222,10 @@ function! s:on_lsp_buffer_enabled() abort
     nmap <buffer> <leader>rn <plug>(lsp-rename)
     nmap <buffer> gr <plug>(lsp-references)
     nmap <buffer> ga <plug>(lsp-code-action-float)
-" Check if this is working
+    " Check if this is working
     nnoremap <buffer> <leader>lca <plug>(lsp-code-action)
+    "nnoremap <buffer> <expr><c-u> lsp#scroll(-4)
+    "nnoremap <buffer> <expr><c-d> lsp#scroll(+4)
 endfunction
 
 augroup lsp_install
