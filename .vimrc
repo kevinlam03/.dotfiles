@@ -3,6 +3,8 @@ let mapleader=" "
 " General Settings
 syntax on
 set termguicolors
+set cursorline
+set cursorcolumn
 set splitright
 set splitbelow
 set backspace=indent,eol,start,nostop
@@ -26,8 +28,8 @@ set clipboard=unnamedplus
 
 " Turn on matching parenthesis setting manually, so it doesn't trigger
 "let g:loaded_matchparen = 1
-autocmd BufWinEnter *.vimrc loadview
-autocmd BufWinLeave *.vimrc mkview
+"autocmd BufWinEnter *.vimrc loadview
+"autocmd BufWinLeave *.vimrc mkview
 " Use ripgrep as external grep tool
 set gp=rg\ --vimgrep\ --smart-case\ --follow
  
@@ -107,6 +109,10 @@ nnoremap # #zz
 " Close focus window centered
 nnoremap <C-w>o <C-w>ozz
 
+" Method jumps centered
+nnoremap [m [mzz
+nnoremap ]m ]mzz
+
 " Goto definition centered
 nnoremap gd gdzz
 
@@ -131,13 +137,23 @@ nnoremap N Nzz
 " Goto definition centered
 nnoremap gd gdzz
 
+" Make local mark jumping centered
+function CenterMarks() 
+    let letters = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
+    for letter in letters
+        let remap = "nnoremap '" . letter . " '" . letter . "zz"
+        execute remap
+    endfor
+endfunction
+call CenterMarks()
+
 " Resize windows
 nnoremap <C-up> <C-W>+
 nnoremap <C-down> <C-W>-
 nnoremap <C-right> <C-W>>
 nnoremap <C-left> <C-W><
 
-" Surround visually selected portion with "
+" Surround visually selected portion with quotes
 vnoremap <leader>" c""<esc>hp
 vnoremap <leader>' c''<esc>hp
 
@@ -201,15 +217,22 @@ let g:airline_theme='catppuccin_mocha'
 let g:lsp_diagnostics_virtual_text_insert_mode_enabled = 0
 let g:lsp_diagnostics_virtual_text_enabled = 1
 " Align it right
-let g:lsp_diagnostics_virtual_text_align = "right"
+let g:lsp_diagnostics_virtual_text_align = "after"
+" can also be truncate
+let g:lsp_diagnostics_virtual_text_wrap = "wrap"
 " Turn off highlighting of diagnostics errors (or could change color)
 let g:lsp_diagnostics_highlights_enabled = 0
-let g:lsp_inlay_hints_enabled = 1
+let g:lsp_inlay_hints_enabled = 0
 " Change text in gutter for diagnostics
-"let g:lsp_diagnostics_signs_error = ""
-"let g:lsp_diagnostics_signs_warning = ""
-"let g:lsp_diagnostics_signs_information = "I"
-"let g:lsp_diagnostics_signs_hint = "H"
+let g:lsp_diagnostics_signs_enabled = 0
+let g:lsp_document_code_action_signs_enabled = 0
+
+" Turn on semantic highlighting
+let g:lsp_semantic_enabled = 1
+"let g:lsp_diagnostics_signs_error = {'text': 'E'}
+"let g:lsp_diagnostics_signs_warning = {'text': 'W'}
+"let g:lsp_diagnostics_signs_information = {'text': 'I'}
+"let g:lsp_diagnostics_signs_hint = {'text': 'H'}
 " Turn off highlighting references
 let g:lsp_document_highlight_enabled = 0
 function! s:on_lsp_buffer_enabled() abort
@@ -224,8 +247,8 @@ function! s:on_lsp_buffer_enabled() abort
     nmap <buffer> ga <plug>(lsp-code-action-float)
     " Check if this is working
     nnoremap <buffer> <leader>lca <plug>(lsp-code-action)
-    "nnoremap <buffer> <expr><c-u> lsp#scroll(-4)
-    "nnoremap <buffer> <expr><c-d> lsp#scroll(+4)
+    nnoremap <buffer> <expr><c-f> lsp#scroll(+4)
+    nnoremap <buffer> <expr><c-b> lsp#scroll(-4)
 endfunction
 
 augroup lsp_install
