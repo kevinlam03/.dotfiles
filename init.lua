@@ -4,10 +4,13 @@ vim.g.maplocalleader = ' '
 -- General Settings
 vim.opt.cursorline = true
 vim.opt.cursorcolumn = false
+vim.opt.signcolumn = 'no'
+vim.opt.guicursor = 'a:block'
 
 vim.opt.splitright = true
 vim.opt.splitbelow = true
 
+-- Show mode in statusline
 vim.opt.showmode = true
 vim.opt.showcmd = true
 
@@ -35,14 +38,12 @@ vim.opt.clipboard = 'unnamedplus'
 -- Save undo history
 vim.opt.undofile = true
 
-vim.opt.signcolumn = 'no'
-
 -- Decrease update time
 vim.opt.updatetime = 250
 
 -- Decrease mapped sequence wait time
 -- Displays which-key popup sooner
-vim.opt.timeoutlen = 300
+vim.opt.timeoutlen = 1000
 
 
 -- Sets how neovim will display certain whitespace characters in the editor.
@@ -57,6 +58,9 @@ vim.opt.inccommand = 'split'
 -- Minimal number of screen lines to keep above and below the cursor.
 -- vim.opt.scrolloff = 10
 
+-- Grep program
+vim.opt.grepprg = 'rg --vimgrep --smart-case --follow'
+
 -- Mappings
 -- Dictionary autocomplete
 -- inoremap <expr> <C-x><C-k> fzf#vim#complete('cat /usr/share/dict/words')
@@ -70,8 +74,7 @@ vim.keymap.set('i', 'jj', '<esc>')
 -- imap <C-BS> <C-W>
 
 -- Turn on and off highlighting
-vim.keymap.set('n', '/', ':set hlsearch<cr>/')
-vim.keymap.set('n', '<esc><esc>', ':set nohlsearch<cr>')
+-- vim.keymap.set('n', '/', ':set hlsearch<cr>/')
 
 -- Vertical movement for linewrap
 vim.keymap.set('n', 'j', 'gj')
@@ -101,6 +104,8 @@ vim.keymap.set('n', '[on', ':set number<cr>')
 vim.keymap.set('n', ']on', ':set nonumber<cr>')
 vim.keymap.set('n', '[or', ':set relativenumber<cr>')
 vim.keymap.set('n', ']or', ':set norelativenumber<cr>')
+vim.keymap.set('n', '[oh', ':set hlsearch<cr>')
+vim.keymap.set('n', ']oh', ':set nohlsearch<cr>')
 
 -- Add newlines
 vim.keymap.set('n', '[<space>', 'O<esc>j')
@@ -170,6 +175,7 @@ vim.keymap.set('n', 'gd', 'gdzz')
 endfunction
 call CenterMarks()
 --]]
+
 -- Resize windows
 vim.keymap.set('n', '<C-up>', '<C-W>+')
 vim.keymap.set('n', '<C-down>', '<C-W>-')
@@ -209,6 +215,7 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
+-- Plugins
 require("lazy").setup({
     {
         "ibhagwan/fzf-lua",
@@ -229,8 +236,42 @@ require("lazy").setup({
         config = function()
             vim.cmd('colorscheme rose-pine')
         end
-    }
+    },
+    {'williamboman/mason.nvim'},
+    {'williamboman/mason-lspconfig.nvim'},
+    {'VonHeikemen/lsp-zero.nvim', branch = 'v3.x'},
+    {'neovim/nvim-lspconfig'},
+    {'hrsh7th/cmp-nvim-lsp'},
+    {'hrsh7th/nvim-cmp'},
+    {'L3MON4D3/LuaSnip'},
 })
+
+-- LSP
+local lsp_zero = require('lsp-zero')
+
+lsp_zero.on_attach(function(client, bufnr)
+  -- see :help lsp-zero-keybindings
+  -- to learn the available actions
+  lsp_zero.default_keymaps({buffer = bufnr})
+end)
+
+-- to learn how to use mason.nvim
+-- read this: https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guide/integrate-with-mason-nvim.md
+require('mason').setup({})
+require('mason-lspconfig').setup({
+  ensure_installed = {
+      'tsserver',
+      'eslint',
+      'pylsp',
+  },
+  handlers = {
+    function(server_name)
+      require('lspconfig')[server_name].setup({})
+    end,
+  },
+})
+-- Autocompletion
+local cmp = require('cmp')
 
 -- Netrw
 vim.g.netrw_bufsettings = 'noma nomod nu nowrap ro nobl'
@@ -252,18 +293,15 @@ require('nvim-treesitter.configs').setup {
         "vim",
         "vimdoc",
         "query",
-        "python" },
-
-        -- Install parsers synchronously (only applied to `ensure_installed`)
-        sync_install = false,
-
-        -- Automatically install missing parsers when entering buffer
-        -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
-        auto_install = true,
-
-        highlight = {
-            enable = true,
-
-            additional_vim_regex_highlighting = false,
-        },
-    }
+        "python" 
+    },
+    -- Install parsers synchronously (only applied to `ensure_installed`)
+    sync_install = false,
+    -- Automatically install missing parsers when entering buffer
+    -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
+    auto_install = true,
+    highlight = {
+        enable = true,
+        additional_vim_regex_highlighting = false,
+    },
+}
