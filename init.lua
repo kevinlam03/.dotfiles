@@ -1,3 +1,1 @@
-require('kevin.remap')
-require('kevin.settings')
-require('kevin.lazy')
+require('kevin')
