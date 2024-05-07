@@ -1,1 +1,1 @@
-/home/kevin/.dotfiles/init.lua
+require('kevin')
