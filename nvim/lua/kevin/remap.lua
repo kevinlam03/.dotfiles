@@ -49,6 +49,12 @@ vim.keymap.set('n', '[or', ':set relativenumber<cr>')
 vim.keymap.set('n', ']or', ':set norelativenumber<cr>')
 vim.keymap.set('n', '[oh', ':set hlsearch<cr>')
 vim.keymap.set('n', ']oh', ':set nohlsearch<cr>')
+vim.keymap.set('n', '[ov', function() 
+    vim.diagnostic.config({ virtual_text = true })
+end)
+vim.keymap.set('n', ']ov', function() 
+    vim.diagnostic.config({ virtual_text = false })
+end)
 
 -- Add newlines
 vim.keymap.set('n', '[<space>', 'O<esc>j')
