@@ -1,5 +1,3 @@
--- LSP
--- 
 return {
     "neovim/nvim-lspconfig",
     dependencies = {
@@ -33,6 +31,20 @@ return {
                 function(server_name) -- default handler (optional)
                     require("lspconfig")[server_name].setup {
                         capabilities = capabilities
+                    }
+                end,
+                ["lua_ls"] = function()
+                    local lspconfig = require("lspconfig")
+                    lspconfig.lua_ls.setup {
+                        capabilities = capabilities,
+                        settings = {
+                            Lua = {
+                                runtime = { version = "Lua 5.1" },
+                                diagnostics = {
+                                    globals = { "vim", }--"it", "describe", "before_each", "after_each" },
+                                }
+                            }
+                        }
                     }
                 end,
             }
@@ -87,4 +99,3 @@ return {
         )
     end
 }
---lsp_zero.default_keymaps({buffer = bufnr})

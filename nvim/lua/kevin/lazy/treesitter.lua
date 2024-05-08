@@ -2,15 +2,15 @@
 return {
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
-    config = function() 
+    config = function()
         require('nvim-treesitter.configs').setup {
-            ensure_installed = { 
+            ensure_installed = {
                 "typescript",
                 "javascript",
                 "vim",
                 "vimdoc",
                 "query",
-                "python" 
+                "python"
             },
             -- Install parsers synchronously (only applied to `ensure_installed`)
             sync_install = false,
@@ -20,6 +20,9 @@ return {
             highlight = {
                 enable = true,
                 additional_vim_regex_highlighting = false,
+            },
+            indent = {
+                enable = true,
             },
         }
     end
