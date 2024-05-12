@@ -5,6 +5,7 @@ vim.g.maplocalleader = ' '
 -- inoremap <expr> <C-x><C-k> fzf#vim#complete('cat /usr/share/dict/words')
 -- Create matching curly brace for loops, if statements, etc.
 vim.keymap.set('i', '{<cr>', '{<cr>}<esc>O')
+vim.keymap.set('i', '[<cr>', '[<cr>]<esc>O')
 
 -- Esc key remap
 vim.keymap.set('i', 'jj', '<esc>')
@@ -12,8 +13,8 @@ vim.keymap.set('i', 'jj', '<esc>')
 -- Delete word in insert mode, not working
 -- imap <C-BS> <C-W>
 
--- Turn on and off highlighting
--- vim.keymap.set('n', '/', ':set hlsearch<cr>/')
+-- Turn on off highlighting on search
+vim.keymap.set('n', '/', ':set nohlsearch<cr>/')
 
 -- Vertical movement for linewrap
 vim.keymap.set('n', 'j', function()
@@ -41,6 +42,10 @@ vim.keymap.set('n', '[c', ':cp<cr>zz')
 vim.keymap.set('n', ']c', ':cn<cr>zz')
 vim.keymap.set('n', '[C', ':cf<cr>zz')
 vim.keymap.set('n', ']C', ':cl<cr>zz')
+
+-- Jump list
+vim.keymap.set('n', '<C-o>', '<C-o>zz')
+vim.keymap.set('n', '<C-i>', '<C-i>zz')
 
 -- Toggle options
 vim.keymap.set('n', '[on', ':set number<cr>')

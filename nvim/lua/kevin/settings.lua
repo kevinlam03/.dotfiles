@@ -1,4 +1,3 @@
-vim.g.netrw_bufsettings = 'noma nomod nu nowrap ro nobl'
 -- General Settings
 vim.opt.cursorline = true
 vim.opt.cursorcolumn = false
@@ -8,8 +7,10 @@ vim.opt.guicursor = 'a:block'
 vim.opt.splitright = true
 vim.opt.splitbelow = true
 
--- Show mode in statusline
-vim.opt.showmode = true
+vim.g.netrw_bufsettings = 'noma nomod nu nowrap ro nobl'
+
+-- Turn off mode, already in lualine
+vim.opt.showmode = false
 vim.opt.showcmd = true
 
 vim.opt.number = true
@@ -24,9 +25,11 @@ vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
-vim.opt.mouse = 'a'
+vim.opt.mouse = 'nv'
 
 vim.opt.wildmenu = true
+-- Complete using longest common string, then wildmenu
+vim.opt.wildmode = 'longest:full'
 
 vim.opt.linebreak = true
 vim.opt.breakindent = true

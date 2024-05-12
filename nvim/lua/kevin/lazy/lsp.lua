@@ -8,8 +8,8 @@ return {
         "hrsh7th/cmp-path",
         "hrsh7th/cmp-cmdline",
         "hrsh7th/nvim-cmp",
-        "L3MON4D3/LuaSnip",
-        "saadparwaiz1/cmp_luasnip",
+        --"L3MON4D3/LuaSnip",
+        --"saadparwaiz1/cmp_luasnip",
     },
     config = function()
         local cmp = require('cmp')
@@ -41,7 +41,7 @@ return {
                             Lua = {
                                 runtime = { version = "Lua 5.1" },
                                 diagnostics = {
-                                    globals = { "vim", }--"it", "describe", "before_each", "after_each" },
+                                    globals = { "vim", },
                                 }
                             }
                         }
@@ -49,18 +49,21 @@ return {
                 end,
             }
         })
-        local cmp_select = { behavior = cmp.SelectBehavior.Select }
+        local cmp_insert = { behavior = cmp.SelectBehavior.Insert }
 
         cmp.setup({
+            window = {
+                completion = cmp.config.window.bordered(),
+                documentation = cmp.config.window.bordered(),
+            },
             mapping = cmp.mapping.preset.insert({
-                ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
-                ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
+                ['<C-p>'] = cmp.mapping.select_prev_item(cmp_insert),
+                ['<C-n>'] = cmp.mapping.select_next_item(cmp_insert),
                 ['<C-y>'] = cmp.mapping.confirm({ select = true }),
-                --["<C-Space>"] = cmp.mapping.complete(),
             }),
             sources = cmp.config.sources({
                 { name = 'nvim_lsp' },
-                { name = 'luasnip' }, -- For luasnip users.
+                --{ name = 'luasnip' }, -- For luasnip users.
             }, {
                 { name = 'buffer' },
             })
@@ -73,11 +76,20 @@ return {
                 vim.keymap.set('n', 'gr', vim.lsp.buf.references, { buffer = args.buf })
                 vim.keymap.set('n', 'gs', vim.lsp.buf.signature_help, { buffer = args.buf })
                 vim.keymap.set('n', 'gl', vim.diagnostic.open_float, { buffer = args.buf })
-                vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { buffer = args.buf })
-                vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { buffer = args.buf })
+                vim.keymap.set('n', '[d', function()
+                    vim.diagnostic.goto_prev()
+                    vim.cmd('norm zz')
+                end, { buffer = args.buf })
+                vim.keymap.set('n', ']d', function()
+                    vim.diagnostic.goto_next()
+                    vim.cmd('norm zz')
+                end, { buffer = args.buf })
                 vim.keymap.set('n', '<leader>lrn', vim.lsp.buf.rename, { buffer = args.buf })
                 vim.keymap.set('n', '<leader>lca', vim.lsp.buf.code_action, { buffer = args.buf })
-                vim.keymap.set('n', '<leader><C-d>', vim.diagnostic.setloclist)
+                vim.keymap.set('n', '<leader><C-d>', function()
+                    vim.diagnostic.setloclist()
+                    vim.cmd('lopen')
+                end)
             end
         })
 
@@ -93,7 +105,8 @@ return {
             },
         })
         vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
-            vim.lsp.handlers.hover, {
+            vim.lsp.handlers.hover,
+            {
                 border = "rounded",
             }
         )
