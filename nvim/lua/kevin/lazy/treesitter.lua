@@ -16,6 +16,8 @@ return {
                 ensure_installed = {
                     "typescript",
                     "javascript",
+                    "jsdoc",
+                    "comment",
                     "vim",
                     "vimdoc",
                     "query",
