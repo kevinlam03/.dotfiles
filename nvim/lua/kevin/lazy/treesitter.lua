@@ -1,8 +1,6 @@
 -- Treesitter
 return {
     "nvim-treesitter/nvim-treesitter",
-    -- Not sure why adding this here allows markdown highlighting
-    "nvim-treesitter/nvim-treesitter-context",
     build = ":TSUpdate",
     config = function()
         require('nvim-treesitter.configs').setup {
