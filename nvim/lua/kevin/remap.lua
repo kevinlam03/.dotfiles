@@ -6,6 +6,7 @@ vim.g.maplocalleader = ' '
 -- Create matching curly brace for loops, if statements, etc.
 vim.keymap.set('i', '{<cr>', '{<cr>}<esc>O')
 vim.keymap.set('i', '[<cr>', '[<cr>]<esc>O')
+vim.keymap.set('i', '(<cr>', '(<cr>)<esc>O')
 
 -- Esc key remap
 vim.keymap.set('i', 'jj', '<esc>')
@@ -66,6 +67,9 @@ end)
 -- Add newlines
 vim.keymap.set('n', '[<space>', 'O<esc>j')
 vim.keymap.set('n', ']<space>', 'o<esc>k')
+
+-- Add line break
+vim.keymap.set('n', '<enter>', 'i<enter><esc>')
 
 -- Y to yank to end of line
 vim.keymap.set('n', 'Y', 'y$')

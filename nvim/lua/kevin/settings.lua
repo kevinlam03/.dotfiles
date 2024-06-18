@@ -70,3 +70,12 @@ vim.opt.grepprg = 'rg --vimgrep --smart-case --follow'
 --vim.opt.statusline += '%y'
 --vim.opt.statusline += '%='
 --vim.opt.statusline +=  '[%l/%L]'
+
+-- Autocommands
+vim.api.nvim_create_autocmd({"BufEnter", "BufWinEnter"}, {
+    pattern = {"*.jsx", "*.json", "*.html", "*.css"},
+    callback = function(ev)
+        vim.opt.tabstop = 2
+        vim.opt.shiftwidth = 2
+    end
+})
