@@ -68,9 +68,6 @@ end)
 vim.keymap.set('n', '[<space>', 'O<esc>j')
 vim.keymap.set('n', ']<space>', 'o<esc>k')
 
--- Add line break
-vim.keymap.set('n', '<enter>', 'i<enter><esc>')
-
 -- Y to yank to end of line
 vim.keymap.set('n', 'Y', 'y$')
 
