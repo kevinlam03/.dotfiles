@@ -7,12 +7,9 @@ return {
             --fzf.files({ resume = true })
             fzf.files()
         end, { silent = true })
-        vim.keymap.set("n", "<leader>F", function()
-            fzf.live_grep()
-        end, { silent = true })
-        vim.keymap.set("n", "<leader>b",
-        "<cmd>lua require('fzf-lua').buffers()<CR>", { silent = true })
-        vim.keymap.set("n", "<leader>/",
-        "<cmd>lua require('fzf-lua').blines()<CR>", { silent = true })
+        vim.keymap.set("n", "<leader>F", fzf.live_grep_native, { silent = true })
+        vim.keymap.set("v", "<leader>F", fzf.grep_visual, { silent = true })
+        vim.keymap.set("n", "<leader>b", fzf.buffers, { silent = true })
+        vim.keymap.set("n", "<leader>/", fzf.blines, { silent = true })
     end
 }
