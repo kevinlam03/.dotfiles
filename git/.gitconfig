@@ -1,0 +1,22 @@
+[user]
+    email = lamk5977@gmail.com
+    name = Kevin Lam
+[core]
+    editor = "~/Applications/nvim.appimage"
+    excludesFile = /home/kevin/.gitignore
+[diff]
+    tool = nvimdiff
+[difftool "nvimdiff"]
+    cmd = "nvim -d \"$LOCAL\" \"$REMOTE\""
+[merge]
+    conflictstyle = diff3
+[alias]
+    st = status
+    di = diff
+    dis = diff --staged
+    hist = log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short
+[pull]
+    rebase = true
+[rebase]
+    autoStash = true
+
