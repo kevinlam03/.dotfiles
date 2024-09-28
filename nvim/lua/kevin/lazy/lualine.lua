@@ -6,8 +6,6 @@ return {
             options = {
                 icons_enabled = true,
                 theme = 'auto',
-                component_separators = {},
-                section_separators = {},
                 disabled_filetypes = {
                     statusline = {},
                     winbar = {},
@@ -28,9 +26,15 @@ return {
                     'filename',
                     path = 1,
                 }},
-                lualine_x = {'encoding',  'filetype'},
+                lualine_x = {'filetype'},
                 lualine_y = {'progress'},
-                lualine_z = {'location'}
+                lualine_z = {{
+                    function()
+                        local current_line = vim.fn.line('.')
+                        local total_lines = vim.fn.line('$')
+                        return string.format("%3d/%d", current_line, total_lines)
+                    end
+                }}
             },
             inactive_sections = {
                 lualine_a = {},
@@ -41,7 +45,13 @@ return {
                 lualine_z = {}
             },
             tabline = {},
-            winbar = {},
+            winbar = {
+                lualine_a = {{
+                    'buffers',
+                    show_filename_only = true,
+                    mode = 0,
+                }},
+            },
             inactive_winbar = {},
             extensions = {}
         }

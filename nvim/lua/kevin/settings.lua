@@ -59,7 +59,7 @@ vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 vim.opt.inccommand = 'split'
 
 -- Minimal number of screen lines to keep above and below the cursor.
--- vim.opt.scrolloff = 10
+vim.opt.scrolloff = 3
 
 -- Grep program
 vim.opt.grepprg = 'rg --vimgrep --smart-case --follow'
