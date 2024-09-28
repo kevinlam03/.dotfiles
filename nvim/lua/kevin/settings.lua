@@ -1,7 +1,7 @@
 -- General Settings
 vim.opt.cursorline = true
 vim.opt.cursorcolumn = false
-vim.opt.signcolumn = 'no'
+vim.opt.signcolumn = 'auto'
 vim.opt.guicursor = 'a:block'
 
 vim.opt.splitright = true
