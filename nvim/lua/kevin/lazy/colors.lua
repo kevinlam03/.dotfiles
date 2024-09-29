@@ -1,14 +1,15 @@
 return {
     {
         "bluz71/vim-moonfly-colors",
+        lazy = true,
         name = "moonfly",
-        priority = 1000,
         config = function ()
             -- vim.cmd('colorscheme moonfly')
         end,
     },
     {
         'rose-pine/neovim',
+        lazy = true,
         config = function()
             require('rose-pine').setup({})
             -- vim.cmd('colorscheme rose-pine-moon')
@@ -16,6 +17,7 @@ return {
     },
     {
         'EdenEast/nightfox.nvim',
+        priority = 1000,
         config = function()
             require('nightfox').setup({})
             vim.cmd('colorscheme carbonfox')
