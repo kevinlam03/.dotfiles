@@ -11,10 +11,14 @@
 [merge]
     conflictstyle = diff3
 [alias]
+    cm = commit
     st = status
     di = diff
     dis = diff --staged
+    br = branch
+    sw = switch
     hist = log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short
+    rev = commit --amend --no-edit
 [pull]
     rebase = true
 [rebase]
