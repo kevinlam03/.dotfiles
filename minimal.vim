@@ -21,7 +21,7 @@ set expandtab
 set wildmenu
 set wildmode=longest:full
 set linebreak
-set clipboard=
+set clipboard+=unnamed
 set mouse=a
 set updatetime=250
 set timeoutlen=1000
@@ -35,8 +35,7 @@ let g:loaded_matchparen = 1
 " Mappings
 
 " Open netrw
-nnoremap <C-n> :Explore
-
+nnoremap <C-n> :Explore<cr>
 
 inoremap {<cr> {<cr>}<esc>O
 
@@ -85,15 +84,6 @@ nnoremap ]<space> o<esc>k
 " Y to yank to end of line
 nnoremap Y y$
                         
-" Yank to system clipboard
-nnoremap <leader>y "+y
-vnoremap <leader>y "+y
-vnoremap <leader>Y "+Y
-
-" Paste from system clipboard
-nnoremap <leader>p "+p
-nnoremap <leader>P "+P
-
 " Delete to void register
 nnoremap <leader>d "_d
 vnoremap <leader>d "_d
