@@ -8,6 +8,6 @@ return {
       -- "3rd/image.nvim", -- Optional image support in preview window: See `# Preview Mode` for more information
     },
     keys = {
-        {'<C-n>', '<cmd>Neotree toggle<cr>'}
+        {'<C-n>', '<cmd>Neotree toggle right<cr>'}
     },
 }

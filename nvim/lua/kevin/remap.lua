@@ -8,11 +8,11 @@ vim.keymap.set('i', '{<cr>', '{<cr>}<esc>O')
 vim.keymap.set('i', '[<cr>', '[<cr>]<esc>O')
 vim.keymap.set('i', '(<cr>', '(<cr>)<esc>O')
 
+-- Delete word
+vim.keymap.set('i', '<C-H>', '<C-W>')
+
 -- Esc key remap
 vim.keymap.set('i', 'jj', '<esc>')
-
--- Delete word in insert mode, not working
--- imap <C-BS> <C-W>
 
 -- Turn on off highlighting on search
 vim.keymap.set('n', '/', ':set nohlsearch<cr>/')
@@ -88,6 +88,7 @@ vim.keymap.set('n', '[ot', function()
     else
         vim.opt.shiftwidth = 4
         vim.opt.tabstop = 4
+        vim.opt.softtabstop = 4
         vim.notify(':set shiftwidth=4')
     end
 end)
@@ -128,7 +129,6 @@ centerMarks()
 -- Center after the following commands
 local centerCmds = function()
     local cmds = {
-        'gd',
         '<C-u>',
         '<C-d>',
         '<C-f>',
@@ -137,7 +137,6 @@ local centerCmds = function()
         '<down>',
         'n',
         'N',
-        'gd',
         '<C-o>',
         '<C-i>',
         '*',

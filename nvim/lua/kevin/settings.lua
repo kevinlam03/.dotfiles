@@ -1,5 +1,5 @@
 -- General Settings
-vim.opt.cursorline = true
+vim.opt.cursorline = false
 vim.opt.cursorcolumn = false
 vim.opt.signcolumn = 'auto'
 vim.opt.guicursor = 'a:block'
@@ -64,18 +64,10 @@ vim.opt.scrolloff = 3
 -- Grep program
 vim.opt.grepprg = 'rg --vimgrep --smart-case --follow'
 
-
--- Statusline
---vim.opt.statusline = '%f%m%r%w' -- filepath and modify read and preview flags
---vim.opt.statusline += '%y'
---vim.opt.statusline += '%='
---vim.opt.statusline +=  '[%l/%L]'
-
 -- Autocommands
-vim.api.nvim_create_autocmd({"BufEnter", "BufWinEnter"}, {
-    pattern = {"*.jsx", "*.json", "*.html", "*.css"},
-    callback = function(ev)
-        vim.opt.tabstop = 2
-        vim.opt.shiftwidth = 2
+vim.api.nvim_create_autocmd({"FileType"}, {
+    pattern = {"c", "cpp", "javascript"},
+    callback = function ()
+        vim.bo.commentstring = '// %s'
     end
 })
