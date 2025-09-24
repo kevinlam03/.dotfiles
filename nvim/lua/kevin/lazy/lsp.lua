@@ -3,6 +3,7 @@ return {
     dependencies = {
         "williamboman/mason.nvim",
         "williamboman/mason-lspconfig.nvim",
+        "WhoIsSethDaniel/mason-tool-installer.nvim",
         "hrsh7th/cmp-nvim-lsp",
         "hrsh7th/cmp-nvim-lsp-signature-help",
         "hrsh7th/cmp-buffer",
@@ -11,6 +12,19 @@ return {
         "hrsh7th/nvim-cmp",
         "L3MON4D3/LuaSnip",
         "saadparwaiz1/cmp_luasnip",
+        {
+            "folke/lazydev.nvim",
+            ft = "lua", -- only load on lua files
+            opts = {
+                library = {
+                    -- Load luvit types when the `vim.uv` word is found
+                    { path = "luvit-meta/library", words = { "vim%.uv" } },
+                },
+            },
+        },
+        -- optional `vim.uv` typings for lazydev
+        { "Bilal2453/luvit-meta", lazy = true },
+        "mfussenegger/nvim-jdtls",
     },
     config = function()
         local cmp = require('cmp')
@@ -20,65 +34,58 @@ return {
             {},
             vim.lsp.protocol.make_client_capabilities(),
             cmp_lsp.default_capabilities())
+        local lspconfig = require("lspconfig")
+        local mason = require("mason")
+        local mason_lspconfig = require("mason-lspconfig")
+        local mason_tool_installer = require("mason-tool-installer")
 
-        require("mason").setup()
-        require("mason-lspconfig").setup({
-            ensure_installed = {
-                'ts_ls',
-                'eslint',
-                'pylsp',
+        local server_configs = {
+            ts_ls = {},
+            eslint = {},
+            pylsp = {},
+            lua_ls = {
+                settings = {
+                    Lua = {
+                        completion = {
+                            callSnippet = "Replace",
+                        },
+                        diagnostics = {
+                            disable = {
+                                "missing-fields"
+                            }
+                        },
+                    },
+                },
             },
-            handlers = {
-                function(server_name) -- default handler (optional)
-                    require("lspconfig")[server_name].setup {
-                        capabilities = capabilities
-                    }
-                end,
-                ["lua_ls"] = function()
-                    local lspconfig = require("lspconfig")
-                    lspconfig.lua_ls.setup {
-                        capabilities = capabilities,
-                        on_init = function(client)
-                            if client.workspace_folders then
-                                local path = client.workspace_folders[1].name
-                                if vim.uv.fs_stat(path..'/.luarc.json') or vim.loop.fs_stat(path..'/.luarc.jsonc') then
-                                    return
-                                end
-                            end
+        }
 
-                            client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
-                                runtime = {
-                                    -- Tell the language server which version of Lua you're using
-                                    -- (most likely LuaJIT in the case of Neovim)
-                                    version = 'LuaJIT'
-                                },
-                                -- Make the server aware of Neovim runtime files
-                                workspace = {
-                                    checkThirdParty = false,
-                                    library = {
-                                        vim.env.VIMRUNTIME
-                                        -- Depending on the usage, you might want to add additional paths here.
-                                        -- "${3rd}/luv/library"
-                                        -- "${3rd}/busted/library",
-                                    }
-                                    -- or pull in all of 'runtimepath'. NOTE: this is a lot slower
-                                    -- library = vim.api.nvim_get_runtime_file("", true)
-                                }
-                            })
-                        end,
-                        settings = {
-                            Lua = {}
-                        }
-                    }
-                end,
-                ["clangd"] = function()
-                    local lspconfig = require("lspconfig")
-                    lspconfig.clangd.setup {
-                        capabilities = capabilities,
-                    }
-                end,
+        mason.setup()
+        local mason_ensure_installed = vim.tbl_keys(server_configs or {})
+        vim.list_extend(
+            mason_ensure_installed,
+            {
+                -- place other packages you want to install but not configure with mason here
+                -- e.g. language servers not configured with nvim-lspconfig, linters, formatters, etc.
             }
+        )
+        mason_tool_installer.setup({
+            ensure_installed = mason_ensure_installed
         })
+        mason_lspconfig.setup({
+            handlers = {
+                ['jdtls'] = function() end,
+                function(server_name)
+                    local server_config = server_configs[server_name] or {}
+                    server_config.capabilities = vim.tbl_deep_extend(
+                        "force",
+                        capabilities,
+                        server_config.capabilities or {}
+                    )
+                    lspconfig[server_name].setup(server_config)
+                end
+            },
+        })
+
         local cmp_insert = { behavior = cmp.SelectBehavior.Insert }
 
         cmp.setup({
@@ -104,6 +111,7 @@ return {
                 { name = 'path' },
             })
         })
+
         -- Keymaps
         vim.api.nvim_create_autocmd('LspAttach', {
             callback = function(args)
@@ -116,11 +124,11 @@ return {
                 vim.keymap.set('n', 'gs', vim.lsp.buf.signature_help, { buffer = args.buf })
                 vim.keymap.set('n', 'gl', vim.diagnostic.open_float, { buffer = args.buf })
                 vim.keymap.set('n', '[d', function()
-                    vim.diagnostic.goto_prev()
+                    vim.diagnostic.jump({count = -1})
                     vim.cmd('norm zz')
                 end, { buffer = args.buf })
                 vim.keymap.set('n', ']d', function()
-                    vim.diagnostic.goto_next()
+                    vim.diagnostic.jump({count = 1})
                     vim.cmd('norm zz')
                 end, { buffer = args.buf })
                 vim.keymap.set('n', '<leader>lrn', vim.lsp.buf.rename, { buffer = args.buf })

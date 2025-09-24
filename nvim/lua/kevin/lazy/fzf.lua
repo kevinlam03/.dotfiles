@@ -3,8 +3,28 @@ return {
     dependencies = { "nvim-tree/nvim-web-devicons" },
     config = function()
         local fzf = require('fzf-lua')
+        fzf.setup {
+            files = {
+                find_opts = "-not -name '*.class'",
+                rg_opts = "--files --glob '!*.class'",
+            },
+        }
         local git_modified = function ()
             fzf.fzf_exec('git ls-files -m; git diff --name-only --staged', {
+                previewer = "builtin",
+                fn_transform = function (entry)
+                    return fzf.make_entry.file(entry, {
+                        file_icons = true,
+                        color_icons = true,
+                    })
+                end,
+                actions = {
+                    ['default'] = fzf.actions.file_edit,
+                },
+            })
+        end
+        local git_files = function ()
+            fzf.fzf_exec('git ls-files', {
                 previewer = "builtin",
                 fn_transform = function (entry)
                     return fzf.make_entry.file(entry, {
@@ -22,7 +42,7 @@ return {
                 actions = {
                     ["ctrl-g"] = {
                         header = "modified",
-                        fn = git_modified
+                        fn = git_files
                     },
                     ["ctrl-h"] = {
                         header = "gitignore",
