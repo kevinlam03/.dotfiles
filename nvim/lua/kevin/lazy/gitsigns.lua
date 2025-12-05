@@ -8,5 +8,11 @@ return {
         vim.keymap.set('n', '<leader>hd', function ()
             gitsigns.diffthis('~')
         end)
+        vim.keymap.set('n', ']h', function ()
+            gitsigns.nav_hunk('next')
+        end)
+        vim.keymap.set('n', '[h', function ()
+            gitsigns.nav_hunk('prev')
+        end)
     end
 }
