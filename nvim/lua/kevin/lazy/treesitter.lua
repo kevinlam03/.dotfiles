@@ -5,6 +5,11 @@ return {
     config = function()
         require('nvim-treesitter.configs').setup {
             ensure_installed = {
+                "bash",
+                "yaml",
+                "toml",
+                "java",
+                "kotlin",
                 "lua",
                 "typescript",
                 "javascript",
