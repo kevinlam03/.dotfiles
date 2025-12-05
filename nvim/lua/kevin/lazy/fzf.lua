@@ -8,6 +8,7 @@ return {
                 find_opts = "-not -name '*.class'",
                 rg_opts = "--files --glob '!*.class'",
             },
+            fzf_colors = true,
         }
         local git_modified = function ()
             fzf.fzf_exec('git ls-files -m; git diff --name-only --staged', {
